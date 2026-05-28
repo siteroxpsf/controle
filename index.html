@@ -234,7 +234,18 @@
 
 <script>
 
-let lancamentos = [];
+<script>
+
+// CARREGAR DADOS SALVOS
+let lancamentos = JSON.parse(localStorage.getItem("lancamentos")) || [];
+
+// INICIAR SISTEMA
+atualizarTabela();
+atualizarResumo();
+
+function salvarDados(){
+  localStorage.setItem("lancamentos", JSON.stringify(lancamentos));
+}
 
 function adicionarLancamento(){
 
@@ -257,6 +268,7 @@ function adicionarLancamento(){
 
   lancamentos.push(item);
 
+  salvarDados();
   atualizarTabela();
   atualizarResumo();
 
@@ -329,9 +341,15 @@ function atualizarResumo(){
 }
 
 function removerLancamento(index){
-  lancamentos.splice(index,1);
-  atualizarTabela();
-  atualizarResumo();
+
+  if(confirm("Deseja excluir este lançamento?")){
+
+    lancamentos.splice(index,1);
+
+    salvarDados();
+    atualizarTabela();
+    atualizarResumo();
+  }
 }
 
 function limparCampos(){
@@ -339,6 +357,8 @@ function limparCampos(){
   document.getElementById("valor").value = "";
   document.getElementById("data").value = "";
 }
+
+</script>
 
 </script>
 
