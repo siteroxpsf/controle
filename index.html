@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Controle Financeiro Familiar</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      background:#f3f4f6;
+      padding:20px;
+      color:#222;
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:20px;
+    }
+
+    .container{
+      max-width:1200px;
+      margin:auto;
+    }
+
+    .card{
+      background:#fff;
+      padding:20px;
+      border-radius:12px;
+      margin-bottom:20px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h2{
+      margin-bottom:15px;
+      color:#0f172a;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+      gap:15px;
+    }
+
+    input, select{
+      width:100%;
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:8px;
+      font-size:14px;
+    }
+
+    button{
+      padding:10px 16px;
+      border:none;
+      border-radius:8px;
+      background:#2563eb;
+      color:white;
+      cursor:pointer;
+      font-weight:bold;
+      margin-top:10px;
+    }
+
+    button:hover{
+      background:#1d4ed8;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:15px;
+    }
+
+    table th, table td{
+      border:1px solid #ddd;
+      padding:10px;
+      text-align:left;
+    }
+
+    table th{
+      background:#e5e7eb;
+    }
+
+    .receita{
+      color:green;
+      font-weight:bold;
+    }
+
+    .despesa{
+      color:red;
+      font-weight:bold;
+    }
+
+    .resumo{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      gap:15px;
+    }
+
+    .box{
+      padding:15px;
+      border-radius:10px;
+      color:white;
+      font-size:18px;
+      font-weight:bold;
+    }
+
+    .entrada{
+      background:#16a34a;
+    }
+
+    .saida{
+      background:#dc2626;
+    }
+
+    .saldo{
+      background:#2563eb;
+    }
+
+    .cartao{
+      background:#7c3aed;
+    }
+
+    .delete-btn{
+      background:#ef4444;
+      padding:5px 10px;
+      font-size:12px;
+    }
+
+    .delete-btn:hover{
+      background:#dc2626;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>💰 Controle Financeiro Familiar</h1>
+
+  <!-- RESUMO -->
+  <div class="card">
+    <h2>Resumo Financeiro</h2>
+
+    <div class="resumo">
+      <div class="box entrada">
+        Receitas<br>
+        R$ <span id="totalReceitas">0.00</span>
+      </div>
+
+      <div class="box saida">
+        Despesas<br>
+        R$ <span id="totalDespesas">0.00</span>
+      </div>
+
+      <div class="box cartao">
+        Cartões<br>
+        R$ <span id="totalCartoes">0.00</span>
+      </div>
+
+      <div class="box saldo">
+        Saldo<br>
+        R$ <span id="saldoFinal">0.00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div class="card">
+    <h2>Lançamento Financeiro</h2>
+
+    <div class="grid">
+
+      <div>
+        <label>Descrição</label>
+        <input type="text" id="descricao" placeholder="Ex: Conta de Luz">
+      </div>
+
+      <div>
+        <label>Valor</label>
+        <input type="number" id="valor" placeholder="0.00">
+      </div>
+
+      <div>
+        <label>Categoria</label>
+        <select id="categoria">
+          <option>Receita</option>
+          <option>Despesa Fixa</option>
+          <option>Despesa Variável</option>
+          <option>Cartão 1</option>
+          <option>Cartão 2</option>
+          <option>Cartão 3</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Data</label>
+        <input type="date" id="data">
+      </div>
+
+    </div>
+
+    <button onclick="adicionarLancamento()">Adicionar</button>
+  </div>
+
+  <!-- TABELA -->
+  <div class="card">
+    <h2>Lançamentos</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Descrição</th>
+          <th>Categoria</th>
+          <th>Data</th>
+          <th>Valor</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+
+      <tbody id="tabelaLancamentos"></tbody>
+
+    </table>
+  </div>
+
+</div>
+
+<script>
+
+let lancamentos = [];
+
+function adicionarLancamento(){
+
+  const descricao = document.getElementById("descricao").value;
+  const valor = parseFloat(document.getElementById("valor").value);
+  const categoria = document.getElementById("categoria").value;
+  const data = document.getElementById("data").value;
+
+  if(!descricao || !valor || !data){
+    alert("Preencha todos os campos!");
+    return;
+  }
+
+  const item = {
+    descricao,
+    valor,
+    categoria,
+    data
+  };
+
+  lancamentos.push(item);
+
+  atualizarTabela();
+  atualizarResumo();
+
+  limparCampos();
+}
+
+function atualizarTabela(){
+
+  const tabela = document.getElementById("tabelaLancamentos");
+  tabela.innerHTML = "";
+
+  lancamentos.forEach((item, index)=>{
+
+    let classe = "despesa";
+
+    if(item.categoria === "Receita"){
+      classe = "receita";
+    }
+
+    tabela.innerHTML += `
+      <tr>
+        <td>${item.descricao}</td>
+        <td>${item.categoria}</td>
+        <td>${item.data}</td>
+        <td class="${classe}">
+          R$ ${item.valor.toFixed(2)}
+        </td>
+        <td>
+          <button class="delete-btn" onclick="removerLancamento(${index})">
+            Excluir
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+function atualizarResumo(){
+
+  let receitas = 0;
+  let despesas = 0;
+  let cartoes = 0;
+
+  lancamentos.forEach(item => {
+
+    if(item.categoria === "Receita"){
+      receitas += item.valor;
+    }
+
+    else if(
+      item.categoria === "Cartão 1" ||
+      item.categoria === "Cartão 2" ||
+      item.categoria === "Cartão 3"
+    ){
+      cartoes += item.valor;
+    }
+
+    else{
+      despesas += item.valor;
+    }
+
+  });
+
+  const saldo = receitas - despesas - cartoes;
+
+  document.getElementById("totalReceitas").innerText = receitas.toFixed(2);
+  document.getElementById("totalDespesas").innerText = despesas.toFixed(2);
+  document.getElementById("totalCartoes").innerText = cartoes.toFixed(2);
+  document.getElementById("saldoFinal").innerText = saldo.toFixed(2);
+}
+
+function removerLancamento(index){
+  lancamentos.splice(index,1);
+  atualizarTabela();
+  atualizarResumo();
+}
+
+function limparCampos(){
+  document.getElementById("descricao").value = "";
+  document.getElementById("valor").value = "";
+  document.getElementById("data").value = "";
+}
+
+</script>
+
+</body>
+</html>
