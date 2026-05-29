@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Controle Financeiro Familiar</title>
 
+  <!-- PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <style>
+
     *{
       margin:0;
       padding:0;
       box-sizing:border-box;
-      font-family: Arial, sans-serif;
+      font-family:Arial,sans-serif;
     }
 
     body{
@@ -19,32 +27,32 @@
       color:#222;
     }
 
-    h1{
-      text-align:center;
-      margin-bottom:20px;
-    }
-
     .container{
       max-width:1200px;
       margin:auto;
     }
 
+    h1{
+      text-align:center;
+      margin-bottom:20px;
+    }
+
     .card{
-      background:#fff;
+      background:white;
       padding:20px;
       border-radius:12px;
       margin-bottom:20px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+      box-shadow:0 2px 10px rgba(0,0,0,0.1);
     }
 
     h2{
       margin-bottom:15px;
-      color:#0f172a;
+      color:#111827;
     }
 
     .grid{
       display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
       gap:15px;
     }
 
@@ -57,18 +65,54 @@
     }
 
     button{
-      padding:10px 16px;
+      padding:10px 15px;
       border:none;
       border-radius:8px;
-      background:#2563eb;
       color:white;
       cursor:pointer;
       font-weight:bold;
       margin-top:10px;
     }
 
-    button:hover{
+    .btn-add{
+      background:#2563eb;
+    }
+
+    .btn-add:hover{
       background:#1d4ed8;
+    }
+
+    .limpar-btn{
+      background:#dc2626;
+    }
+
+    .limpar-btn:hover{
+      background:#b91c1c;
+    }
+
+    .pdf-btn{
+      background:#059669;
+    }
+
+    .pdf-btn:hover{
+      background:#047857;
+    }
+
+    .edit-btn{
+      background:#f59e0b;
+      margin-right:5px;
+    }
+
+    .edit-btn:hover{
+      background:#d97706;
+    }
+
+    .delete-btn{
+      background:#ef4444;
+    }
+
+    .delete-btn:hover{
+      background:#dc2626;
     }
 
     table{
@@ -77,7 +121,8 @@
       margin-top:15px;
     }
 
-    table th, table td{
+    table th,
+    table td{
       border:1px solid #ddd;
       padding:10px;
       text-align:left;
@@ -99,7 +144,7 @@
 
     .resumo{
       display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
       gap:15px;
     }
 
@@ -119,24 +164,23 @@
       background:#dc2626;
     }
 
-    .saldo{
-      background:#2563eb;
-    }
-
     .cartao{
       background:#7c3aed;
     }
 
-    .delete-btn{
-      background:#ef4444;
-      padding:5px 10px;
-      font-size:12px;
+    .saldo{
+      background:#2563eb;
     }
 
-    .delete-btn:hover{
-      background:#dc2626;
+    .filtros{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:15px;
     }
+
   </style>
+
 </head>
 
 <body>
@@ -147,9 +191,11 @@
 
   <!-- RESUMO -->
   <div class="card">
+
     <h2>Resumo Financeiro</h2>
 
     <div class="resumo">
+
       <div class="box entrada">
         Receitas<br>
         R$ <span id="totalReceitas">0.00</span>
@@ -169,198 +215,732 @@
         Saldo<br>
         R$ <span id="saldoFinal">0.00</span>
       </div>
+
     </div>
+
   </div>
 
-  <!-- FORMULARIO -->
+  <!-- FORM -->
   <div class="card">
-    <h2>Lançamento Financeiro</h2>
+
+    <h2>Novo Lançamento</h2>
 
     <div class="grid">
 
       <div>
+
         <label>Descrição</label>
-        <input type="text" id="descricao" placeholder="Ex: Conta de Luz">
+
+        <input
+          type="text"
+          id="descricao"
+          placeholder="Ex: Conta de Luz"
+        >
+
       </div>
 
       <div>
+
         <label>Valor</label>
-        <input type="number" id="valor" placeholder="0.00">
+
+        <input
+          type="number"
+          id="valor"
+          placeholder="0.00"
+        >
+
       </div>
 
       <div>
+
         <label>Categoria</label>
+
         <select id="categoria">
+
           <option>Receita</option>
+
           <option>Despesa Fixa</option>
+
           <option>Despesa Variável</option>
-          <option>Cartão 1</option>
-          <option>Cartão 2</option>
+
+          <option>Cartão Nubank</option>
+
+          <option>Cartão MercadoPago</option>
+
           <option>Cartão 3</option>
+
         </select>
+
       </div>
 
       <div>
+
         <label>Data</label>
-        <input type="date" id="data">
+
+        <input
+          type="date"
+          id="data"
+        >
+
       </div>
 
     </div>
 
-    <button onclick="adicionarLancamento()">Adicionar</button>
+    <button
+      class="btn-add"
+      id="btnAdicionar"
+    >
+      Adicionar
+    </button>
+
+    <button
+      class="limpar-btn"
+      id="btnLimpar"
+    >
+      Limpar Tudo
+    </button>
+
+    <button
+      class="pdf-btn"
+      onclick="gerarPDF()"
+    >
+      Gerar Relatório PDF
+    </button>
+
   </div>
 
   <!-- TABELA -->
   <div class="card">
+
     <h2>Lançamentos</h2>
 
+    <div class="filtros">
+
+      <select
+        id="ordenarPor"
+        onchange="ordenarLancamentos()"
+      >
+
+        <option value="">
+          Ordenar Por
+        </option>
+
+        <option value="data">
+          Data
+        </option>
+
+        <option value="categoria">
+          Categoria
+        </option>
+
+        <option value="valor">
+          Valor
+        </option>
+
+      </select>
+
+      <select
+        id="tipoOrdem"
+        onchange="ordenarLancamentos()"
+      >
+
+        <option value="asc">
+          Crescente
+        </option>
+
+        <option value="desc">
+          Decrescente
+        </option>
+
+      </select>
+
+    </div>
+
     <table>
+
       <thead>
+
         <tr>
+
           <th>Descrição</th>
+
           <th>Categoria</th>
+
           <th>Data</th>
+
           <th>Valor</th>
+
           <th>Ação</th>
+
         </tr>
+
       </thead>
 
       <tbody id="tabelaLancamentos"></tbody>
 
     </table>
+
   </div>
 
 </div>
 
-<script>
+<script type="module">
 
-<script>
+  import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
 
-// CARREGAR DADOS SALVOS
-let lancamentos = JSON.parse(localStorage.getItem("lancamentos")) || [];
+  import {
 
-// INICIAR SISTEMA
-atualizarTabela();
-atualizarResumo();
+    getFirestore,
 
-function salvarDados(){
-  localStorage.setItem("lancamentos", JSON.stringify(lancamentos));
-}
+    collection,
 
-function adicionarLancamento(){
+    addDoc,
 
-  const descricao = document.getElementById("descricao").value;
-  const valor = parseFloat(document.getElementById("valor").value);
-  const categoria = document.getElementById("categoria").value;
-  const data = document.getElementById("data").value;
+    deleteDoc,
 
-  if(!descricao || !valor || !data){
-    alert("Preencha todos os campos!");
-    return;
+    updateDoc,
+
+    doc,
+
+    onSnapshot,
+
+    getDocs
+
   }
+  from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
-  const item = {
+  // FIREBASE CONFIG
+  const firebaseConfig = {
+
+    apiKey:
+    "AIzaSyBxlznqulQAmADsu1tyHkzwsIogXRdJjHM",
+
+    authDomain:
+    "siterox-2a65d.firebaseapp.com",
+
+    projectId:
+    "siterox-2a65d",
+
+    storageBucket:
+    "siterox-2a65d.firebasestorage.app",
+
+    messagingSenderId:
+    "144750299369",
+
+    appId:
+    "1:144750299369:web:5df7d8f86b5d42dac50878",
+
+    measurementId:
+    "G-WW7GN5PT87"
+
+  };
+
+  // FIREBASE
+  const app =
+    initializeApp(firebaseConfig);
+
+  const db =
+    getFirestore(app);
+
+  const tabela =
+    document.getElementById("tabelaLancamentos");
+
+  let editandoId = null;
+
+  let dadosPDF = [];
+
+  // ADICIONAR OU EDITAR
+  document
+    .getElementById("btnAdicionar")
+    .addEventListener("click", async ()=>{
+
+      const descricao =
+        document.getElementById("descricao").value;
+
+      const valor =
+        parseFloat(
+          document.getElementById("valor").value
+        );
+
+      const categoria =
+        document.getElementById("categoria").value;
+
+      const data =
+        document.getElementById("data").value;
+
+      if(!descricao || !valor || !data){
+
+        alert("Preencha todos os campos!");
+
+        return;
+
+      }
+
+      // EDITAR
+      if(editandoId){
+
+        await updateDoc(
+
+          doc(db,"lancamentos",editandoId),
+
+          {
+
+            descricao,
+            valor,
+            categoria,
+            data
+
+          }
+
+        );
+
+        editandoId = null;
+
+        document
+          .getElementById("btnAdicionar")
+          .innerText = "Adicionar";
+
+      }
+
+      // ADICIONAR
+      else{
+
+        await addDoc(
+
+          collection(db,"lancamentos"),
+
+          {
+
+            descricao,
+            valor,
+            categoria,
+            data
+
+          }
+
+        );
+
+      }
+
+      limparCampos();
+
+    });
+
+  // TEMPO REAL
+  onSnapshot(
+
+    collection(db,"lancamentos"),
+
+    (snapshot)=>{
+
+      tabela.innerHTML = "";
+
+      dadosPDF = [];
+
+      let receitas = 0;
+      let despesas = 0;
+      let cartoes = 0;
+
+      snapshot.forEach((docItem)=>{
+
+        const item =
+          docItem.data();
+
+        dadosPDF.push(item);
+
+        let classe =
+          "despesa";
+
+        if(item.categoria === "Receita"){
+
+          classe = "receita";
+
+          receitas += item.valor;
+
+        }
+
+        else if(
+
+          item.categoria === "Cartão Nubank" ||
+          item.categoria === "Cartão MercadoPago" ||
+          item.categoria === "Cartão 3"
+
+        ){
+
+          cartoes += item.valor;
+
+        }
+
+        else{
+
+          despesas += item.valor;
+
+        }
+
+        tabela.innerHTML += `
+
+          <tr>
+
+            <td>${item.descricao}</td>
+
+            <td>${item.categoria}</td>
+
+            <td>${item.data}</td>
+
+            <td class="${classe}">
+              R$ ${item.valor.toFixed(2)}
+            </td>
+
+            <td>
+
+              <button
+                class="edit-btn"
+                onclick="window.editar(
+                  '${docItem.id}',
+                  '${item.descricao}',
+                  '${item.valor}',
+                  '${item.categoria}',
+                  '${item.data}'
+                )"
+              >
+                Editar
+              </button>
+
+              <button
+                class="delete-btn"
+                onclick="window.excluir('${docItem.id}')"
+              >
+                Excluir
+              </button>
+
+            </td>
+
+          </tr>
+
+        `;
+
+      });
+
+      const saldo =
+        receitas - despesas - cartoes;
+
+      document
+        .getElementById("totalReceitas")
+        .innerText = receitas.toFixed(2);
+
+      document
+        .getElementById("totalDespesas")
+        .innerText = despesas.toFixed(2);
+
+      document
+        .getElementById("totalCartoes")
+        .innerText = cartoes.toFixed(2);
+
+      document
+        .getElementById("saldoFinal")
+        .innerText = saldo.toFixed(2);
+
+    }
+
+  );
+
+  // EDITAR
+  window.editar = function(
+    id,
     descricao,
     valor,
     categoria,
     data
-  };
+  ){
 
-  lancamentos.push(item);
+    editandoId = id;
 
-  salvarDados();
-  atualizarTabela();
-  atualizarResumo();
+    document
+      .getElementById("descricao")
+      .value = descricao;
 
-  limparCampos();
-}
+    document
+      .getElementById("valor")
+      .value = valor;
 
-function atualizarTabela(){
+    document
+      .getElementById("categoria")
+      .value = categoria;
 
-  const tabela = document.getElementById("tabelaLancamentos");
-  tabela.innerHTML = "";
+    document
+      .getElementById("data")
+      .value = data;
 
-  lancamentos.forEach((item, index)=>{
+    document
+      .getElementById("btnAdicionar")
+      .innerText =
+      "Salvar Alterações";
 
-    let classe = "despesa";
+    window.scrollTo({
 
-    if(item.categoria === "Receita"){
-      classe = "receita";
-    }
+      top:0,
 
-    tabela.innerHTML += `
-      <tr>
-        <td>${item.descricao}</td>
-        <td>${item.categoria}</td>
-        <td>${item.data}</td>
-        <td class="${classe}">
-          R$ ${item.valor.toFixed(2)}
-        </td>
-        <td>
-          <button class="delete-btn" onclick="removerLancamento(${index})">
-            Excluir
-          </button>
-        </td>
-      </tr>
-    `;
-  });
-}
+      behavior:"smooth"
 
-function atualizarResumo(){
+    });
 
-  let receitas = 0;
-  let despesas = 0;
-  let cartoes = 0;
-
-  lancamentos.forEach(item => {
-
-    if(item.categoria === "Receita"){
-      receitas += item.valor;
-    }
-
-    else if(
-      item.categoria === "Cartão 1" ||
-      item.categoria === "Cartão 2" ||
-      item.categoria === "Cartão 3"
-    ){
-      cartoes += item.valor;
-    }
-
-    else{
-      despesas += item.valor;
-    }
-
-  });
-
-  const saldo = receitas - despesas - cartoes;
-
-  document.getElementById("totalReceitas").innerText = receitas.toFixed(2);
-  document.getElementById("totalDespesas").innerText = despesas.toFixed(2);
-  document.getElementById("totalCartoes").innerText = cartoes.toFixed(2);
-  document.getElementById("saldoFinal").innerText = saldo.toFixed(2);
-}
-
-function removerLancamento(index){
-
-  if(confirm("Deseja excluir este lançamento?")){
-
-    lancamentos.splice(index,1);
-
-    salvarDados();
-    atualizarTabela();
-    atualizarResumo();
   }
-}
 
-function limparCampos(){
-  document.getElementById("descricao").value = "";
-  document.getElementById("valor").value = "";
-  document.getElementById("data").value = "";
-}
+  // EXCLUIR
+  window.excluir = async function(id){
 
-</script>
+    const confirmar =
+      confirm(
+        "Deseja excluir este lançamento?"
+      );
+
+    if(confirmar){
+
+      await deleteDoc(
+        doc(db,"lancamentos",id)
+      );
+
+    }
+
+  }
+
+  // LIMPAR TUDO
+  document
+    .getElementById("btnLimpar")
+    .addEventListener("click", async ()=>{
+
+      const confirmar =
+        confirm(
+          "Deseja apagar TODOS os lançamentos?"
+        );
+
+      if(!confirmar) return;
+
+      const querySnapshot =
+        await getDocs(
+          collection(db,"lancamentos")
+        );
+
+      querySnapshot.forEach(async(item)=>{
+
+        await deleteDoc(
+          doc(db,"lancamentos",item.id)
+        );
+
+      });
+
+    });
+
+  // LIMPAR CAMPOS
+  function limparCampos(){
+
+    document
+      .getElementById("descricao")
+      .value = "";
+
+    document
+      .getElementById("valor")
+      .value = "";
+
+    document
+      .getElementById("data")
+      .value = "";
+
+  }
+
+  // ORDENAR
+  window.ordenarLancamentos = function(){
+
+    const campo =
+      document.getElementById("ordenarPor").value;
+
+    const ordem =
+      document.getElementById("tipoOrdem").value;
+
+    if(!campo) return;
+
+    const linhas =
+      Array.from(
+        tabela.querySelectorAll("tr")
+      );
+
+    linhas.sort((a,b)=>{
+
+      let valorA =
+        a.children[
+          campo === "data" ? 2 :
+          campo === "categoria" ? 1 : 3
+        ].innerText;
+
+      let valorB =
+        b.children[
+          campo === "data" ? 2 :
+          campo === "categoria" ? 1 : 3
+        ].innerText;
+
+      if(campo === "valor"){
+
+        valorA =
+          parseFloat(
+            valorA
+            .replace("R$","")
+            .replace(",",".")
+          );
+
+        valorB =
+          parseFloat(
+            valorB
+            .replace("R$","")
+            .replace(",",".")
+          );
+
+      }
+
+      if(campo === "data"){
+
+        valorA =
+          new Date(valorA);
+
+        valorB =
+          new Date(valorB);
+
+      }
+
+      if(valorA < valorB)
+        return ordem === "asc" ? -1 : 1;
+
+      if(valorA > valorB)
+        return ordem === "asc" ? 1 : -1;
+
+      return 0;
+
+    });
+
+    tabela.innerHTML = "";
+
+    linhas.forEach(linha=>{
+
+      tabela.appendChild(linha);
+
+    });
+
+  }
+
+  // GERAR PDF
+  window.gerarPDF = function(){
+
+    const { jsPDF } = window.jspdf;
+
+    const doc = new jsPDF();
+
+    let y = 20;
+
+    doc.setFontSize(18);
+
+    doc.text(
+      "Relatório Financeiro Familiar",
+      20,
+      y
+    );
+
+    y += 15;
+
+    doc.setFontSize(11);
+
+    dadosPDF.forEach((item,index)=>{
+
+      doc.text(
+
+        `${index + 1}. ${item.descricao}
+Categoria: ${item.categoria}
+Data: ${item.data}
+Valor: R$ ${item.valor.toFixed(2)}`,
+
+        20,
+
+        y
+
+      );
+
+      y += 25;
+
+      if(y > 260){
+
+        doc.addPage();
+
+        y = 20;
+
+      }
+
+    });
+
+    y += 10;
+
+    doc.setFontSize(14);
+
+    doc.text(
+
+      `Receitas: R$ ${
+        document.getElementById("totalReceitas").innerText
+      }`,
+
+      20,
+
+      y
+
+    );
+
+    y += 10;
+
+    doc.text(
+
+      `Despesas: R$ ${
+        document.getElementById("totalDespesas").innerText
+      }`,
+
+      20,
+
+      y
+
+    );
+
+    y += 10;
+
+    doc.text(
+
+      `Cartões: R$ ${
+        document.getElementById("totalCartoes").innerText
+      }`,
+
+      20,
+
+      y
+
+    );
+
+    y += 10;
+
+    doc.text(
+
+      `Saldo Final: R$ ${
+        document.getElementById("saldoFinal").innerText
+      }`,
+
+      20,
+
+      y
+
+    );
+
+    doc.save(
+      "relatorio-financeiro.pdf"
+    );
+
+  }
 
 </script>
 
 </body>
+
 </html>
