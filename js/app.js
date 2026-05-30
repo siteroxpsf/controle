@@ -75,6 +75,10 @@ async function salvarLancamento(){
     const data =
     document.getElementById("data").value;
 
+    //Limpar campo
+
+
+
     if(
         !descricao ||
         !valor ||
@@ -132,6 +136,18 @@ async function salvarLancamento(){
 
     limparCampos();
 }
+
+//Limpar Campo botao
+
+document
+.getElementById("btnLimpar")
+.addEventListener("click",()=>{
+
+    limparCampos();
+
+});
+
+
 
 //Editar
 
@@ -254,3 +270,170 @@ document
 
     }
 );
+console.log("APP CARREGADO");
+
+//carregar dados do firebase
+
+onSnapshot(
+
+    collection(db,"lancamentos"),
+
+    (snapshot)=>{
+
+        tabela.innerHTML = "";
+        tabelaCartao.innerHTML = "";
+
+        let receitas = 0;
+        let despesas = 0;
+        let cartoes = 0;
+
+        let categorias = {};
+
+        snapshot.forEach((docItem)=>{
+
+            const item = docItem.data();
+
+            let classe = "despesa";
+
+            if(item.categoria === "Receita"){
+
+                receitas += item.valor;
+
+                classe = "receita";
+
+            }
+
+            else if(
+                item.categoria.includes("Cartão")
+            ){
+
+                cartoes += item.valor;
+
+            }
+
+            else{
+
+                despesas += item.valor;
+
+            }
+
+            if(!categorias[item.categoria]){
+
+                categorias[item.categoria] = 0;
+
+            }
+
+            categorias[item.categoria] += item.valor;
+
+            tabela.innerHTML += `
+
+                <tr>
+
+                    <td>${item.descricao}</td>
+
+                    <td>${item.categoria}</td>
+
+                    <td>${item.data}</td>
+
+                    <td class="${classe}">
+                        R$ ${item.valor.toFixed(2)}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="btn-edit"
+                            onclick='editar("${docItem.id}",${JSON.stringify(item)})'
+                        >
+                            Editar
+                        </button>
+
+                        <button
+                            class="btn-delete"
+                            onclick='excluir("${docItem.id}")'
+                        >
+                            Excluir
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            if(item.categoria.includes("Cartão")){
+
+                tabelaCartao.innerHTML += `
+
+                    <tr>
+
+                        <td>${item.descricao}</td>
+
+                        <td>${item.categoria}</td>
+
+                        <td>${item.parcelas || 1}x</td>
+
+                        <td>${item.data}</td>
+
+                        <td>
+                            R$ ${item.valor.toFixed(2)}
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-delete"
+                                onclick='excluir("${docItem.id}")'
+                            >
+                                Excluir
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+
+        });
+
+        document
+        .getElementById("totalReceitas")
+        .innerText =
+        receitas.toFixed(2);
+
+        document
+        .getElementById("totalDespesas")
+        .innerText =
+        despesas.toFixed(2);
+
+        document
+        .getElementById("totalCartoes")
+        .innerText =
+        cartoes.toFixed(2);
+
+        document
+        .getElementById("saldoFinal")
+        .innerText =
+        (
+            receitas -
+            despesas -
+            cartoes
+        ).toFixed(2);
+
+        atualizarGrafico(categorias);
+
+    }
+
+);
+
+    function limparCampos(){
+
+    document.getElementById("descricao").value = "";
+    document.getElementById("valor").value = "";
+    document.getElementById("data").value = "";
+
+    document.getElementById("categoria").selectedIndex = 0;
+
+}
