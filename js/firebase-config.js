@@ -7,22 +7,22 @@ from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 const firebaseConfig = {
 
     apiKey:
-    "SUA_API_KEY",
+    "AIzaSyBxlznqulQAmADsu1tyHkzwsIogXRdJjHM",
 
     authDomain:
-    "SEU_AUTH_DOMAIN",
+    "siterox-2a65d.firebaseapp.com",
 
     projectId:
-    "SEU_PROJECT_ID",
+    "siterox-2a65d",
 
     storageBucket:
-    "SEU_STORAGE_BUCKET",
+    "siterox-2a65d.firebasestorage.app",
 
     messagingSenderId:
-    "SEU_SENDER_ID",
+    "144750299369",
 
     appId:
-    "SEU_APP_ID"
+    "1:144750299369:web:5df7d8f86b5d42dac50878",
 
 };
 
