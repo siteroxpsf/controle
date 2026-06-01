@@ -1,0 +1,1106 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Controle Financeiro Familiar PRO</title>
+
+  <!-- PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- CHART -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    body{
+      background:#f3f4f6;
+      color:#222;
+      padding:20px;
+      transition:0.3s;
+    }
+
+    body.dark{
+      background:#111827;
+      color:white;
+    }
+
+    .container{
+      max-width:1300px;
+      margin:auto;
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:20px;
+    }
+
+    .card{
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      margin-bottom:20px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.1);
+      transition:0.3s;
+    }
+
+    body.dark .card{
+      background:#1f2937;
+      color:white;
+    }
+
+    h2{
+      margin-bottom:15px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:15px;
+    }
+
+    input,
+    select{
+      width:100%;
+      padding:10px;
+      border-radius:8px;
+      border:1px solid #ccc;
+      font-size:14px;
+    }
+
+    button{
+      padding:10px 15px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      color:white;
+      font-weight:bold;
+      margin-top:10px;
+    }
+
+    .btn-add{
+      background:#2563eb;
+    }
+
+    .btn-cartao{
+      background:#7c3aed;
+    }
+
+    .btn-pdf{
+      background:#059669;
+    }
+
+    .btn-limpar{
+      background:#dc2626;
+    }
+
+    .btn-dark{
+      background:#111827;
+    }
+
+    .btn-delete{
+      background:#ef4444;
+    }
+
+    .btn-edit{
+      background:#f59e0b;
+    }
+
+    .resumo{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:15px;
+    }
+
+    .box{
+      color:white;
+      padding:20px;
+      border-radius:12px;
+      font-size:18px;
+      font-weight:bold;
+    }
+
+    .entrada{
+      background:#16a34a;
+    }
+
+    .saida{
+      background:#dc2626;
+    }
+
+    .cartao{
+      background:#7c3aed;
+    }
+
+    .saldo{
+      background:#2563eb;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:20px;
+    }
+
+    table th,
+    table td{
+      border:1px solid #ddd;
+      padding:10px;
+    }
+
+    table th{
+      background:#e5e7eb;
+    }
+
+    body.dark table th{
+      background:#374151;
+    }
+
+    .receita{
+      color:#16a34a;
+      font-weight:bold;
+    }
+
+    .despesa{
+      color:#dc2626;
+      font-weight:bold;
+    }
+
+    .modal{
+      display:none;
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.5);
+      justify-content:center;
+      align-items:center;
+      z-index:999;
+    }
+
+    .modal-content{
+      background:white;
+      width:95%;
+      max-width:900px;
+      border-radius:12px;
+      padding:20px;
+      max-height:90vh;
+      overflow:auto;
+    }
+
+    body.dark .modal-content{
+      background:#1f2937;
+    }
+
+    .filtros{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+
+    canvas{
+      margin-top:20px;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>
+    💰 Controle Financeiro Familiar PRO
+  </h1>
+
+  <!-- RESUMO -->
+  <div class="card">
+
+    <h2>Resumo Financeiro</h2>
+
+    <div class="resumo">
+
+      <div class="box entrada">
+        Receitas<br>
+        R$ <span id="totalReceitas">0.00</span>
+      </div>
+
+      <div class="box saida">
+        Despesas<br>
+        R$ <span id="totalDespesas">0.00</span>
+      </div>
+
+      <div class="box cartao">
+        Cartões<br>
+        R$ <span id="totalCartoes">0.00</span>
+      </div>
+
+      <div class="box saldo">
+        Saldo<br>
+        R$ <span id="saldoFinal">0.00</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FORM -->
+  <div class="card">
+
+    <h2>Novo Lançamento</h2>
+
+    <div class="grid">
+
+      <div>
+
+        <label>Descrição</label>
+
+        <input
+          type="text"
+          id="descricao"
+        >
+
+      </div>
+
+      <div>
+
+        <label>Valor</label>
+
+        <input
+          type="number"
+          id="valor"
+        >
+
+      </div>
+
+      <div>
+
+        <label>Categoria</label>
+
+        <select id="categoria">
+
+          <option>Receita</option>
+
+          <option>Despesa Fixa</option>
+
+          <option>Despesa Variável</option>
+
+        </select>
+
+      </div>
+
+      <div>
+
+        <label>Data</label>
+
+        <input
+          type="date"
+          id="data"
+        >
+
+      </div>
+
+    </div>
+
+    <button
+      class="btn-add"
+      id="btnAdicionar"
+    >
+      Adicionar
+    </button>
+
+    <button
+      class="btn-cartao"
+      onclick="abrirCartao()"
+    >
+      Despesa de Cartão
+    </button>
+
+    <button
+      class="btn-pdf"
+      onclick="gerarPDF()"
+    >
+      Gerar PDF
+    </button>
+
+    <button
+      class="btn-dark"
+      onclick="toggleDarkMode()"
+    >
+      Dark Mode
+    </button>
+
+    <button
+      class="btn-limpar"
+      id="btnLimpar"
+    >
+      Limpar Tudo
+    </button>
+
+  </div>
+
+  <!-- FILTROS -->
+  <div class="card">
+
+    <h2>Filtros</h2>
+
+    <div class="filtros">
+
+      <select id="filtroMes">
+
+        <option value="">
+          Todos os meses
+        </option>
+
+      </select>
+
+      <select id="filtroCategoria">
+
+        <option value="">
+          Todas Categorias
+        </option>
+
+      </select>
+
+      <button
+        class="btn-add"
+        onclick="filtrarDados()"
+      >
+        Filtrar
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- TABELA -->
+  <div class="card">
+
+    <h2>Lançamentos</h2>
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>Descrição</th>
+
+          <th>Categoria</th>
+
+          <th>Data</th>
+
+          <th>Valor</th>
+
+          <th>Ação</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody id="tabelaLancamentos"></tbody>
+
+    </table>
+
+  </div>
+
+  <!-- GRÁFICO -->
+  <div class="card">
+
+    <h2>Gráfico Financeiro</h2>
+
+    <canvas id="grafico"></canvas>
+
+  </div>
+
+</div>
+
+<!-- MODAL CARTÃO -->
+<div
+  class="modal"
+  id="modalCartao"
+>
+
+  <div class="modal-content">
+
+    <h2>
+      💳 Compras Cartão de Crédito
+    </h2>
+
+    <div class="grid">
+
+      <div>
+
+        <label>Descrição</label>
+
+        <input
+          type="text"
+          id="cartaoDescricao"
+        >
+
+      </div>
+
+      <div>
+
+        <label>Valor</label>
+
+        <input
+          type="number"
+          id="cartaoValor"
+        >
+
+      </div>
+
+      <div>
+
+        <label>Cartão</label>
+
+        <select id="cartaoNome">
+
+          <option>Cartão Nubank</option>
+
+          <option>Cartão MercadoPago</option>
+
+          <option>Cartão 3</option>
+
+        </select>
+
+      </div>
+
+      <div>
+
+        <label>Parcelas</label>
+
+        <input
+          type="number"
+          id="parcelas"
+          value="1"
+        >
+
+      </div>
+
+      <div>
+
+        <label>Data</label>
+
+        <input
+          type="date"
+          id="cartaoData"
+        >
+
+      </div>
+
+    </div>
+
+    <button
+      class="btn-add"
+      onclick="salvarCompraCartao()"
+    >
+      Salvar Compra
+    </button>
+
+    <button
+      class="btn-limpar"
+      onclick="fecharCartao()"
+    >
+      Fechar
+    </button>
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>Descrição</th>
+
+          <th>Cartão</th>
+
+          <th>Parcelas</th>
+
+          <th>Data</th>
+
+          <th>Valor</th>
+
+          <th>Ação</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody id="tabelaCartao"></tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+<script type="module">
+
+  import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+
+  import {
+
+    getFirestore,
+    collection,
+    addDoc,
+    deleteDoc,
+    updateDoc,
+    doc,
+    onSnapshot,
+    getDocs
+
+  }
+  from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+  // FIREBASE CONFIG
+  const firebaseConfig = {
+
+    apiKey:
+    "AIzaSyBxlznqulQAmADsu1tyHkzwsIogXRdJjHM",
+
+    authDomain:
+    "siterox-2a65d.firebaseapp.com",
+
+    projectId:
+    "siterox-2a65d",
+
+    storageBucket:
+    "siterox-2a65d.firebasestorage.app",
+
+    messagingSenderId:
+    "144750299369",
+
+    appId:
+    "1:144750299369:web:5df7d8f86b5d42dac50878",
+
+     measurementId: 
+     "G-WW7GN5PT87"
+  };
+
+  const app =
+    initializeApp(firebaseConfig);
+
+  const db =
+    getFirestore(app);
+
+  const tabela =
+    document.getElementById("tabelaLancamentos");
+
+  const tabelaCartao =
+    document.getElementById("tabelaCartao");
+
+  let grafico;
+
+  // DARK MODE
+  window.toggleDarkMode = function(){
+
+    document.body.classList.toggle("dark");
+
+  }
+
+  // ABRIR MODAL
+  window.abrirCartao = function(){
+
+    document
+      .getElementById("modalCartao")
+      .style.display = "flex";
+
+  }
+
+  // FECHAR MODAL
+  window.fecharCartao = function(){
+
+    document
+      .getElementById("modalCartao")
+      .style.display = "none";
+
+  }
+
+  // ADICIONAR
+  document
+    .getElementById("btnAdicionar")
+    .addEventListener("click", async ()=>{
+
+      const descricao =
+        document.getElementById("descricao").value;
+
+      const valor =
+        parseFloat(
+          document.getElementById("valor").value
+        );
+
+      const categoria =
+        document.getElementById("categoria").value;
+
+      const data =
+        document.getElementById("data").value;
+
+      if(!descricao || !valor || !data){
+
+        alert("Preencha tudo!");
+
+        return;
+
+      }
+
+      await addDoc(
+
+        collection(db,"lancamentos"),
+
+        {
+
+          descricao,
+          valor,
+          categoria,
+          data,
+          parcelas:1
+
+        }
+
+      );
+
+      limparCampos();
+
+    });
+
+  // SALVAR CARTÃO
+  window.salvarCompraCartao = async function(){
+
+    const descricao =
+      document.getElementById("cartaoDescricao").value;
+
+    const valor =
+      parseFloat(
+        document.getElementById("cartaoValor").value
+      );
+
+    const categoria =
+      document.getElementById("cartaoNome").value;
+
+    const parcelas =
+      parseInt(
+        document.getElementById("parcelas").value
+      );
+
+    const data =
+      document.getElementById("cartaoData").value;
+
+    if(!descricao || !valor || !data){
+
+      alert("Preencha tudo!");
+
+      return;
+
+    }
+
+    await addDoc(
+
+      collection(db,"lancamentos"),
+
+      {
+
+        descricao,
+        valor,
+        categoria,
+        data,
+        parcelas
+
+      }
+
+    );
+
+    limparCamposCartao();
+
+  }
+
+  // LISTAR
+  onSnapshot(
+
+    collection(db,"lancamentos"),
+
+    (snapshot)=>{
+
+      tabela.innerHTML = "";
+      tabelaCartao.innerHTML = "";
+
+      let receitas = 0;
+      let despesas = 0;
+      let cartoes = 0;
+
+      let categorias = {};
+
+      snapshot.forEach((docItem)=>{
+
+        const item =
+          docItem.data();
+
+        let classe =
+          "despesa";
+
+        if(item.categoria === "Receita"){
+
+          receitas += item.valor;
+
+          classe = "receita";
+
+        }
+
+        else if(
+
+          item.categoria.includes("Cartão")
+
+        ){
+
+          cartoes += item.valor;
+
+        }
+
+        else{
+
+          despesas += item.valor;
+
+        }
+
+        // GRÁFICO
+        if(!categorias[item.categoria]){
+
+          categorias[item.categoria] = 0;
+
+        }
+
+        categorias[item.categoria] += item.valor;
+
+        // TABELA PRINCIPAL
+        tabela.innerHTML += `
+
+          <tr>
+
+            <td>${item.descricao}</td>
+
+            <td>${item.categoria}</td>
+
+            <td>${item.data}</td>
+
+            <td class="${classe}">
+              R$ ${item.valor.toFixed(2)}
+            </td>
+
+            <td>
+
+              <button
+                class="btn-delete"
+                onclick="excluir('${docItem.id}')"
+              >
+                Excluir
+              </button>
+
+            </td>
+
+          </tr>
+
+        `;
+
+        // TABELA CARTÃO
+        if(item.categoria.includes("Cartão")){
+
+          tabelaCartao.innerHTML += `
+
+            <tr>
+
+              <td>${item.descricao}</td>
+
+              <td>${item.categoria}</td>
+
+              <td>${item.parcelas}x</td>
+
+              <td>${item.data}</td>
+
+              <td class="despesa">
+                R$ ${item.valor.toFixed(2)}
+              </td>
+
+              <td>
+
+                <button
+                  class="btn-delete"
+                  onclick="excluir('${docItem.id}')"
+                >
+                  Excluir
+                </button>
+
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+
+      });
+
+      // RESUMO
+      document
+        .getElementById("totalReceitas")
+        .innerText =
+        receitas.toFixed(2);
+
+      document
+        .getElementById("totalDespesas")
+        .innerText =
+        despesas.toFixed(2);
+
+      document
+        .getElementById("totalCartoes")
+        .innerText =
+        cartoes.toFixed(2);
+
+      document
+        .getElementById("saldoFinal")
+        .innerText =
+        (
+          receitas -
+          despesas -
+          cartoes
+        ).toFixed(2);
+
+      // GRÁFICO
+      atualizarGrafico(categorias);
+
+    }
+
+  );
+
+  // EXCLUIR
+  window.excluir = async function(id){
+
+    const confirmar =
+      confirm("Excluir item?");
+
+    if(confirmar){
+
+      await deleteDoc(
+        doc(db,"lancamentos",id)
+      );
+
+    }
+
+  }
+
+  // LIMPAR
+  document
+    .getElementById("btnLimpar")
+    .addEventListener("click", async ()=>{
+
+      const confirmar =
+        confirm(
+          "Apagar tudo?"
+        );
+
+      if(!confirmar) return;
+
+      const query =
+        await getDocs(
+          collection(db,"lancamentos")
+        );
+
+      query.forEach(async(item)=>{
+
+        await deleteDoc(
+          doc(db,"lancamentos",item.id)
+        );
+
+      });
+
+    });
+
+  // PDF
+  window.gerarPDF = function(){
+
+    const { jsPDF } = window.jspdf;
+
+    const doc =
+      new jsPDF();
+
+    doc.setFontSize(20);
+
+    doc.text(
+      "Relatório Financeiro",
+      20,
+      20
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+
+      `Receitas: R$ ${
+        document
+        .getElementById("totalReceitas")
+        .innerText
+      }`,
+
+      20,
+
+      40
+
+    );
+
+    doc.text(
+
+      `Despesas: R$ ${
+        document
+        .getElementById("totalDespesas")
+        .innerText
+      }`,
+
+      20,
+
+      50
+
+    );
+
+    doc.text(
+
+      `Cartões: R$ ${
+        document
+        .getElementById("totalCartoes")
+        .innerText
+      }`,
+
+      20,
+
+      60
+
+    );
+
+    doc.text(
+
+      `Saldo: R$ ${
+        document
+        .getElementById("saldoFinal")
+        .innerText
+      }`,
+
+      20,
+
+      70
+
+    );
+
+    doc.save(
+      "financeiro.pdf"
+    );
+
+  }
+
+  // CAMPOS
+  function limparCampos(){
+
+    document
+      .getElementById("descricao")
+      .value = "";
+
+    document
+      .getElementById("valor")
+      .value = "";
+
+    document
+      .getElementById("data")
+      .value = "";
+
+  }
+
+  function limparCamposCartao(){
+
+    document
+      .getElementById("cartaoDescricao")
+      .value = "";
+
+    document
+      .getElementById("cartaoValor")
+      .value = "";
+
+    document
+      .getElementById("cartaoData")
+      .value = "";
+
+  }
+
+  // FILTRO
+  window.filtrarDados = function(){
+
+    alert(
+      "Filtro avançado pronto para expansão."
+    );
+
+  }
+
+  // GRÁFICO
+  function atualizarGrafico(categorias){
+
+    const ctx =
+      document
+      .getElementById("grafico");
+
+    if(grafico){
+
+      grafico.destroy();
+
+    }
+
+    grafico = new Chart(ctx,{
+
+      type:"doughnut",
+
+      data:{
+
+        labels:Object.keys(categorias),
+
+        datasets:[{
+
+          data:Object.values(categorias),
+
+          backgroundColor:[
+
+            "#16a34a",
+            "#dc2626",
+            "#7c3aed",
+            "#2563eb",
+            "#f59e0b"
+
+          ]
+
+        }]
+
+      }
+
+    });
+
+  }
+
+</script>
+
+</body>
+</html>
+```
