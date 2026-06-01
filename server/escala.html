@@ -1,0 +1,390 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Escala de Serviço</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    font-size:14px;
+    margin:20px;
+}
+
+.cabecalho{
+    border:1px solid #000;
+    text-align:center;
+    padding:15px;
+}
+
+.cabecalho h2,
+.cabecalho h1,
+.cabecalho div{
+    margin:8px 0;
+}
+
+[contenteditable="true"]{
+    outline:none;
+}
+
+.configuracao{
+    margin:15px 0;
+    padding:10px;
+    border:1px solid #ccc;
+    background:#f8f8f8;
+}
+
+.configuracao label{
+    font-weight:bold;
+    margin-right:5px;
+}
+
+.configuracao select,
+.configuracao input{
+    padding:5px;
+    margin-right:15px;
+}
+
+.botoes{
+    margin:15px 0;
+}
+
+button{
+    padding:10px 15px;
+    cursor:pointer;
+    margin-right:5px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+}
+
+col.nome{
+    width:220px;
+}
+
+col.funcao{
+    width:90px;
+}
+
+col.coren{
+    width:90px;
+}
+
+col.carga{
+    width:110px;
+}
+
+col.horario{
+    width:120px;
+}
+
+col.dia{
+    width:260px;
+}
+
+col.acao{
+    width:70px;
+}
+
+th{
+    background:#f1f1f1;
+}
+
+th,td{
+    border:1px solid #000;
+    padding:6px;
+    vertical-align:top;
+    white-space:pre-wrap;
+    word-break:break-word;
+    overflow-wrap:break-word;
+}
+
+td.editavel{
+    min-height:80px;
+}
+
+td.editavel[contenteditable="true"]{
+    cursor:text;
+}
+
+textarea{
+    width:100%;
+    min-height:100px;
+    resize:vertical;
+}
+
+h3{
+    margin-top:25px;
+}
+
+@media print{
+
+    body{
+        margin:0;
+    }
+
+    .botoes,
+    .configuracao{
+        display:none;
+    }
+
+    td,th{
+        page-break-inside:avoid;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="cabecalho">
+
+    <h2 contenteditable="true">
+        E.S.F COCAJÁ
+    </h2>
+
+    <div contenteditable="true">
+        R. Thomaz Souto, 11 - Fone (14) 3344-9069
+    </div>
+
+    <div contenteditable="true">
+        E-mail: saude_ipaussu@hotmail.com
+    </div>
+
+    <h1 contenteditable="true">
+        ESCALA DE SERVIÇO - MAIO / 2026 / ENFERMAGEM
+    </h1>
+
+</div>
+
+<div class="configuracao">
+
+    <label>Fonte:</label>
+
+    <select id="fonte" onchange="alterarFonte()">
+        <option value="Arial">Arial</option>
+        <option value="Calibri">Calibri</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Tahoma">Tahoma</option>
+        <option value="Courier New">Courier New</option>
+    </select>
+
+    <label>Tamanho da Fonte:</label>
+
+    <input
+        type="number"
+        id="tamanhoFonte"
+        min="8"
+        max="30"
+        value="14"
+        onchange="alterarTamanho()"
+    > px
+
+</div>
+
+<div class="botoes">
+
+    <button onclick="adicionarLinha()">
+        ➕ Adicionar Profissional
+    </button>
+
+    <button onclick="window.print()">
+        🖨️ Imprimir
+    </button>
+
+</div>
+
+<table id="tabela">
+
+<colgroup>
+
+    <col class="nome">
+    <col class="funcao">
+    <col class="coren">
+    <col class="carga">
+    <col class="horario">
+
+    <col class="dia">
+    <col class="dia">
+    <col class="dia">
+    <col class="dia">
+    <col class="dia">
+
+    <col class="acao">
+
+</colgroup>
+
+<thead>
+
+<tr>
+
+    <th>Nome</th>
+    <th>Função</th>
+    <th>COREN</th>
+    <th>Carga Horária</th>
+    <th>Horário</th>
+
+    <th>Segunda-feira</th>
+    <th>Terça-feira</th>
+    <th>Quarta-feira</th>
+    <th>Quinta-feira</th>
+    <th>Sexta-feira</th>
+
+    <th>Ação</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td contenteditable="true">PAULINO CELSO RODRIGUES</td>
+
+<td contenteditable="true">ENF RT</td>
+
+<td contenteditable="true">216980</td>
+
+<td contenteditable="true">40H</td>
+
+<td contenteditable="true">
+7h às 13h
+14h às 16h
+</td>
+
+<td class="editavel" contenteditable="true">
+ATENDIMENTO DE ENFERMAGEM
+</td>
+
+<td class="editavel" contenteditable="true">
+ATENDIMENTO DE ENFERMAGEM
+</td>
+
+<td class="editavel" contenteditable="true">
+ATENDIMENTO DE ENFERMAGEM
+</td>
+
+<td class="editavel" contenteditable="true">
+ATENDIMENTO DE ENFERMAGEM
+</td>
+
+<td class="editavel" contenteditable="true">
+ATENDIMENTO DE ENFERMAGEM
+</td>
+
+<td>
+<button onclick="removerLinha(this)">
+❌
+</button>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+<h3>Legenda</h3>
+
+<textarea>
+A.E = Atendimento de Enfermagem
+C.E = Consulta de Enfermagem
+C.E.E = Coleta de Exame Externo
+C.E.I = Coleta de Exame Interno
+C.I = Curativo Interno
+C.E.X = Curativo Externo
+I = Inalação
+E.M = Esterilização de Material
+</textarea>
+
+<h3>Observações</h3>
+
+<textarea>
+Digite as observações do mês...
+</textarea>
+
+<script>
+
+function alterarFonte(){
+
+    const fonte =
+    document.getElementById("fonte").value;
+
+    document.body.style.fontFamily =
+    fonte;
+}
+
+function alterarTamanho(){
+
+    const tamanho =
+    document.getElementById("tamanhoFonte").value;
+
+    document.body.style.fontSize =
+    tamanho + "px";
+}
+
+function adicionarLinha(){
+
+    const tbody =
+    document.querySelector("#tabela tbody");
+
+    const linha =
+    document.createElement("tr");
+
+    linha.innerHTML = `
+
+<td contenteditable="true"></td>
+<td contenteditable="true"></td>
+<td contenteditable="true"></td>
+<td contenteditable="true"></td>
+<td contenteditable="true"></td>
+
+<td class="editavel" contenteditable="true"></td>
+<td class="editavel" contenteditable="true"></td>
+<td class="editavel" contenteditable="true"></td>
+<td class="editavel" contenteditable="true"></td>
+<td class="editavel" contenteditable="true"></td>
+
+<td>
+<button onclick="removerLinha(this)">
+❌
+</button>
+</td>
+
+`;
+
+    tbody.appendChild(linha);
+
+}
+
+function removerLinha(botao){
+
+    if(confirm("Excluir profissional?")){
+
+        botao.closest("tr").remove();
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
+```
