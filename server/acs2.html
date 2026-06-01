@@ -1,0 +1,462 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro Individual ACS</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #f5f5f5;
+}
+
+.container{
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group{
+    margin-bottom: 12px;
+}
+
+label{
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+}
+
+input, select{
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.grid3{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+button{
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover{
+    background: #0b5ed7;
+}
+
+@media print{
+    button{
+        display:none;
+    }
+
+    body{
+        background:white;
+    }
+
+    .container{
+        box-shadow:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Cadastro Individual ACS</h1>
+
+<div class="grid">
+    <div class="form-group">
+        <label>Nome</label>
+        <input type="text">
+    </div>
+
+    <div class="form-group">
+        <label>Data de Nascimento</label>
+        <input type="date">
+    </div>
+</div>
+
+<div class="grid">
+    <div class="form-group">
+        <label>CPF ou Cartão SUS</label>
+        <input type="text">
+    </div>
+
+    <div class="form-group">
+        <label>Estuda?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="form-group">
+        <label>Escolaridade</label>
+        <input type="text">
+    </div>
+
+    <div class="form-group">
+        <label>Situação no Mercado de Trabalho</label>
+        <input type="text">
+    </div>
+</div>
+
+<h3>Condições e Situações</h3>
+
+<div class="grid3">
+    <div class="form-group">
+        <label>Possui Deficiência?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Gestante?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Fumante?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Dependente de Álcool?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Abuso de Drogas?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Hipertenso?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Diabético?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Teve AVC ou Infarto?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Problema Cardíaco?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Problema no Pulmão?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Tem ou Teve Câncer?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Internação nos últimos 12 meses?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Tratamento Psiquiátrico?</label>
+        <select>
+            <option></option>
+            <option>Faz</option>
+            <option>Fez</option>
+            <option>Nunca</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Acamado/Domiciliado?</label>
+        <select>
+            <option></option>
+            <option>Sim</option>
+            <option>Não</option>
+        </select>
+    </div>
+</div>
+
+<button onclick="gerarPDF()">📄 Gerar PDF para Impressão</button>
+
+<script>
+function gerarPDF() {
+
+    const conteudo = `
+    <html>
+    <head>
+        <title>Cadastro Individual ACS</title>
+        <style>
+            body{
+                font-family: Arial, sans-serif;
+                margin: 30px;
+                font-size: 14px;
+                line-height: 1.8;
+            }
+
+            h1{
+                text-align:center;
+                margin-bottom:25px;
+            }
+
+            .linha{
+                margin-bottom:12px;
+            }
+
+            .campo{
+                border-bottom:1px solid #000;
+                display:inline-block;
+                min-width:250px;
+                height:18px;
+            }
+
+            .campo-pequeno{
+                border-bottom:1px solid #000;
+                display:inline-block;
+                min-width:120px;
+                height:18px;
+            }
+
+            .campo-grande{
+                border-bottom:1px solid #000;
+                display:inline-block;
+                width:100%;
+                height:18px;
+            }
+
+            .check{
+                display:inline-block;
+                width:14px;
+                height:14px;
+                border:1px solid #000;
+                margin:0 5px;
+            }
+
+            @page{
+                size:A4;
+                margin:15mm;
+            }
+        </style>
+    </head>
+    <body>
+
+        <h1>CADASTRO INDIVIDUAL ACS</h1>
+
+        <div class="linha">
+            Nome:
+            <span class="campo" style="width:500px"></span>
+        </div>
+
+        <div class="linha">
+            Data de Nascimento:
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            CPF ou SUS:
+            <span class="campo" style="width:300px"></span>
+        </div>
+
+        <div class="linha">
+            Estuda:
+            <span class="campo-pequeno"></span>
+
+            Escolaridade:
+            <span class="campo" style="width:300px"></span>
+        </div>
+
+        <div class="linha">
+            Situação no Mercado de Trabalho:
+            <span class="campo" style="width:450px"></span>
+        </div>
+
+        <br>
+
+        <div class="linha">
+            Tem alguma Deficiência?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            Está Gestante?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            Fumante?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            Dependente de Álcool?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            Abuso de Drogas?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            Hipertenso?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            Diabético?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            Tem ou Teve AVC / Infarto?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            Problema Cardíaco?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            Problema no Pulmão?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            Tem ou Teve Câncer?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            Internação nos últimos 12 meses?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            Fez ou Faz Tratamento Psiquiátrico?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <div class="linha">
+            Acamado / Domiciliado?
+            <span class="campo-pequeno"></span>
+        </div>
+
+        <br><br>
+
+        <div class="linha">
+            Observações:
+        </div>
+
+        <div class="linha"><span class="campo-grande"></span></div>
+        <div class="linha"><span class="campo-grande"></span></div>
+        <div class="linha"><span class="campo-grande"></span></div>
+        <div class="linha"><span class="campo-grande"></span></div>
+
+    </body>
+    </html>
+    `;
+
+    const janela = window.open('', '_blank');
+    janela.document.write(conteudo);
+    janela.document.close();
+
+    setTimeout(() => {
+        janela.print();
+    }, 500);
+}
+</script>
+
+</div>
+
+</body>
+</html>
+```
