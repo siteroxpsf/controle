@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha de Visita ACS</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f9;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+h1,h2{
+    color:#0d6efd;
+    border-bottom:2px solid #ddd;
+    padding-bottom:5px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+}
+
+.campo{
+    display:flex;
+    flex-direction:column;
+}
+
+label{
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+input, select, textarea{
+    padding:8px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+textarea{
+    resize:vertical;
+}
+
+.botoes{
+    margin-top:20px;
+    text-align:center;
+}
+
+button{
+    padding:10px 20px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:16px;
+    margin:5px;
+}
+
+.salvar{
+    background:#198754;
+    color:white;
+}
+
+.limpar{
+    background:#dc3545;
+    color:white;
+}
+
+.imprimir{
+    background:#0d6efd;
+    color:white;
+}
+
+@media print{
+    button{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Ficha de Visita Domiciliar - ACS</h1>
+
+<!-- DADOS DA VISITA -->
+<h2>Dados da Visita</h2>
+
+<div class="form-grid">
+
+<div class="campo">
+<label>Data da Visita</label>
+<input type="date">
+</div>
+
+<div class="campo">
+<label>Nome do ACS</label>
+<input type="text">
+</div>
+
+<div class="campo">
+<label>Microárea</label>
+<input type="text">
+</div>
+
+</div>
+
+<!-- CADASTRO DOMICILIAR -->
+<h2>Cadastro Domiciliar</h2>
+
+<div class="form-grid">
+
+<div class="campo">
+<label>Endereço</label>
+<input type="text">
+</div>
+
+<div class="campo">
+<label>Número</label>
+<input type="text">
+</div>
+
+<div class="campo">
+<label>Bairro</label>
+<input type="text">
+</div>
+
+<div class="campo">
+<label>CEP</label>
+<input type="text">
+</div>
+
+<div class="campo">
+<label>Telefone</label>
+<input type="tel">
+</div>
+
+<div class="campo">
+<label>Responsável pelo Domicílio</label>
+<input type="text">
+</div>
+
+<div class="campo">
+<label>Nº de Moradores</label>
+<input type="number">
+</div>
+
+<div class="campo">
+<label>Tipo de Moradia</label>
+<select>
+<option></option>
+<option>Casa</option>
+<option>Apartamento</option>
+<option>Chácara</option>
+<option>Outro</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Abastecimento de Água</label>
+<select>
+<option></option>
+<option>Rede Pública</option>
+<option>Poço</option>
+<option>Cisterna</option>
+<option>Outro</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Destino do Lixo</label>
+<select>
+<option></option>
+<option>Coleta Pública</option>
+<option>Queimado</option>
+<option>Enterrado</option>
+<option>Outro</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Possui Energia Elétrica?</label>
+<select>
+<option></option>
+<option>Sim</option>
+<option>Não</option>
+</select>
+</div>
+
+</div>
+
+<!-- CADASTRO INDIVIDUAL -->
+<h2>Cadastro Individual</h2>
+
+<div class="form-grid">
+
+<div class="campo">
+<label>Nome Completo</label>
+<input type="text">
+</div>
+
+<div class="campo">
+<label>Nome Social</label>
+<input type="text">
+</div>
+
+<div class="campo">
+<label>CPF</label>
+<input type="text">
+</div>
+
+<div class="campo">
+<label>Cartão SUS</label>
+<input type="text">
+</div>
+
+<div class="campo">
+<label>Data de Nascimento</label>
+<input type="date">
+</div>
+
+<div class="campo">
+<label>Sexo</label>
+<select>
+<option></option>
+<option>Masculino</option>
+<option>Feminino</option>
+<option>Outro</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Raça/Cor</label>
+<select>
+<option></option>
+<option>Branca</option>
+<option>Preta</option>
+<option>Parda</option>
+<option>Amarela</option>
+<option>Indígena</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Escolaridade</label>
+<select>
+<option></option>
+<option>Sem Escolaridade</option>
+<option>Fundamental Incompleto</option>
+<option>Fundamental Completo</option>
+<option>Médio Incompleto</option>
+<option>Médio Completo</option>
+<option>Superior</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Ocupação</label>
+<input type="text">
+</div>
+
+<div class="campo">
+<label>Gestante</label>
+<select>
+<option></option>
+<option>Sim</option>
+<option>Não</option>
+<option>Não se aplica</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Possui Deficiência?</label>
+<select>
+<option></option>
+<option>Sim</option>
+<option>Não</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Possui Plano de Saúde?</label>
+<select>
+<option></option>
+<option>Sim</option>
+<option>Não</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Hipertenso</label>
+<select>
+<option></option>
+<option>Sim</option>
+<option>Não</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Diabético</label>
+<select>
+<option></option>
+<option>Sim</option>
+<option>Não</option>
+</select>
+</div>
+
+</div>
+
+<h2>Observações da Visita</h2>
+
+<div class="campo">
+<textarea rows="6"></textarea>
+</div>
+
+<div class="botoes">
+<button class="salvar" onclick="alert('Ficha preenchida. Implemente o salvamento conforme sua necessidade.')">
+Salvar
+</button>
+
+<button class="limpar" onclick="document.querySelectorAll('input, textarea').forEach(c=>c.value=''); document.querySelectorAll('select').forEach(c=>c.selectedIndex=0);">
+Limpar
+</button>
+
+<button class="imprimir" onclick="window.print()">
+Imprimir
+</button>
+</div>
+
+</div>
+
+</body>
+</html>
